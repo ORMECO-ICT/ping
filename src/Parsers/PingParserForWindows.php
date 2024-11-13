@@ -31,7 +31,7 @@ final class PingParserForWindows extends PingParser
         $this->unreachable = $this->isUnreachable($ping);
 
         if ($this->unreachable) {
-            $this->setStatistics($ping[count($ping) - 2]);
+            $this->setStatistics($ping[count($ping) - 1]);
         } else {
             $this->setRoundTripTime($ping[count($ping) - 1]);
             $this->setSequence();
@@ -93,14 +93,14 @@ final class PingParserForWindows extends PingParser
      */
     private function isUnreachable(array $ping): bool
     {
-        $needles = 'perdidos|lost';
+        $needles = 'Packets: Sent';
 
         $result = $ping[count($ping) - 1];
 
         $unreachable = false;
 
         foreach (explode('|', $needles) as $needle) {
-            $search = strpos($result, '100% '.$needle);
+            $search = strpos($result, $needle);
 
             if ($search !== false) {
                 $unreachable = true;
